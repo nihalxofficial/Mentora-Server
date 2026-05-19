@@ -56,7 +56,7 @@ async function run() {
       let result;
       if (search) {
         result = await courseCollection
-          .find({ title: { $regex: search, $options: "i" } })
+          .find({$or: [{ title: { $regex: search, $options: "i" } },{ instructor: { $regex: search, $options: "i" } }]})
           .toArray();
       } else {
         result = await courseCollection.find().toArray();
@@ -80,11 +80,17 @@ async function run() {
       res.send(result);
     })
 
-    app.post("/enrollments/:id", verifyToken, async (req, res) => {
-        const { id } = req.params;
+    app.get("/enrollments/:userId", verifyToken, async(req, res)=>{
+      const {userId} = req.params;
+      const result = await enrollmentCollection.find({userId: userId}).toArray();
+      res.send(result);
+    })
+
+    app.post("/enrollments/:courseId", verifyToken, async (req, res) => {
+        const { courseId } = req.params;
         const enrollmentData = req.body;
         await courseCollection.updateOne(
-          { _id: new ObjectId(id) },
+          { _id: new ObjectId(courseId) },
           { $inc: {enrollCount: 1}, $set: {lastEnrollAt: new Date()}},
         );
         const result = await enrollmentCollection.insertOne({...enrollmentData, enrollAt: new Date()})
