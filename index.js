@@ -35,7 +35,6 @@ const verifyToken = async (req, res, next) => {
     );
     const { payload } = await jwtVerify(token, JWKS);
     req.user = payload;
-    console.log(req.user);
     next();
   } catch (error) {
     console.error("Token validation failed:", error);
@@ -45,7 +44,7 @@ const verifyToken = async (req, res, next) => {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     const db = client.db("mentora");
     const courseCollection = db.collection("courses");
