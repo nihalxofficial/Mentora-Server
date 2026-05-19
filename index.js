@@ -50,7 +50,14 @@ async function run() {
     const courseCollection = db.collection("courses");
 
     app.get("/courses", async (req, res) => {
-      const result = await courseCollection.find().toArray();
+      const {search} = req.query
+      console.log(search);
+      let result;
+      if(search){
+        result = await courseCollection.find({ title: { $regex: search, $options: "i" } }).toArray();
+      }else{
+        result = await courseCollection.find().toArray();
+      }
       res.send(result);
     });
     app.get("/featured", async (req, res) => {
