@@ -211,6 +211,119 @@ Make sure to add all `.env` variables in your **Vercel project settings → Envi
 
 ---
 
+## 🐳 Docker Deployment
+
+This project supports full containerized deployment using **Docker** and **Docker Compose**.
+
+---
+
+## 📦 Pull Prebuilt Images from Docker Hub
+
+### Client Image
+
+```bash
+docker pull nihalxofficial/mentora-client:v1
+```
+
+### Server Image
+
+```bash
+docker pull nihalxofficial/mentora-server:v1
+```
+
+---
+
+## 🚀 Run with Docker Compose
+
+Create a `docker-compose.yml` file in the project root:
+
+```yaml
+version: "3.9"
+
+services:
+  client:
+    image: nihalxofficial/mentora-client:v1
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./mentora-client/.env.local
+    depends_on:
+      - server
+
+  server:
+    image: nihalxofficial/mentora-server:v1
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./mentora-server/.env
+```
+
+---
+
+## ▶️ Start Containers
+
+Run the following command from the directory containing the `docker-compose.yml` file:
+
+```bash
+docker compose up -d
+```
+
+This will:
+
+* Pull the latest images from Docker Hub
+* Create the containers
+* Start both the client and server services
+
+---
+
+## 🛑 Stop Containers
+
+```bash
+docker compose down
+```
+
+---
+
+## 🔄 Restart Containers
+
+```bash
+docker compose restart
+```
+
+---
+
+## 📜 View Logs
+
+```bash
+docker compose logs -f
+```
+
+---
+
+## 🧹 Remove Unused Docker Resources
+
+```bash
+docker system prune -a
+```
+
+---
+
+## 🌐 Application URLs
+
+| Service    | URL                   |
+| ---------- | --------------------- |
+| Client     | http://localhost:3000 |
+| Server API | http://localhost:5000 |
+
+---
+
+## ⚠️ Notes
+
+* Make sure Docker Desktop is installed and running
+* Ensure `.env` and `.env.local` files exist before starting containers
+* Update image tags (`v1`) when publishing new versions
+---
+
 ## 🤝 Contributing
 
 1. Fork the repository
